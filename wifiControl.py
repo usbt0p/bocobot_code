@@ -37,12 +37,12 @@ class Robot:
     def move_forward(self):
         """Move forward."""
         print("Forward")
-        self.move(self.speed, self.speed+0.03)  # Slightly faster on right for straight movement
+        self.move(self.speed, self.speed-0.02)  # tune to compensate
     
     def move_backward(self):
         """Move backward."""
         print("Backward")
-        self.move(-self.speed, -self.speed-0.03)
+        self.move(-self.speed, -self.speed+0.02)
     
     def move_left(self):
         """Move left."""
