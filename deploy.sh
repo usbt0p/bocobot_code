@@ -1,6 +1,6 @@
 #!/bin/bash
-"""Sincroniza el proyecto local con la unidad CIRCUITPY."""
-DESTINO="/media/$USER/CIRCUITPY/" # Ajusta esta ruta según tu distro
+"""Synchronize the current directory to the CIRCUITPY drive, excluding .git and this deploy script."""
+DESTINO="/media/$USER/CIRCUITPY/"
 
 rsync -av --exclude='.git' --exclude='deploy.sh' ./ "$DESTINO"
 sync
