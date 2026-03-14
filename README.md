@@ -11,6 +11,7 @@ The robot has the following features:
 - An ultrasonic sensor for obstacle detection (HC-SR04)
 - A light sensor (photoresistor) for ambient light detection
 - A line follower sensor for line tracking with an array of 5 IR sensors.
+- Battery powered trough 4 1.5V AA batteries.
 
 ## Getting Started
 
@@ -27,6 +28,17 @@ The code in the `wifiControl.py` expects you to have a `settings.toml` file (tha
 CIRCUITPY_WIFI_SSID = "Your_WiFi_SSID"
 CIRCUITPY_WIFI_PASSWORD = "Your_WiFi_Password"
 ```
+
+## Files
+- `code.py`: Main entry point for the robot. It lets you select which behaviour to run (obstacle avoidance or wifi control) by pressing the corresponding buttons on the robot.
+
+- `obstacleAvoidance.py`: Implements a simple obstacle avoidance behaviour using the ultrasonic sensor. The robot moves forward until it detects an obstacle within a certain distance, at which point it turns right and continues moving. 
+
+- `wifiControl.py`: Implements a simple web server that allows you to control the robot remotely via WiFi. The server provides endpoints for moving forward, backward, left, and right, plus wheel calibration and speed controls.
+
+- `deploy.sh`: A simple bash script to synchronize the local project with the CIRCUITPY drive. Good for development and prevents issues with developing directly on the CIRCUITPY drive.
+
+- `static`: Contains static files for the web server, such as the HTML, CSS, and JavaScript for the control interface.
 
 ## Libraries
 The code relies on the following libraries, which should be placed in the `lib` directory of the CIRCUITPY drive:
