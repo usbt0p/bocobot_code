@@ -37,6 +37,27 @@
             <input type="range" id="speedSlider" class="slider" min="0" max="1" step="0.01" value="0.5" oninput="setSpeed(this.value)">
             <span id="speedValue">50%</span>
         </div>
+        <div class="calibration-container">
+            <h2>Motor Calibration</h2>
+            <div class="calibration-row">
+                <div class="calibration-control">
+                    <label>Left Motor:</label>
+                    <div class="calibration-buttons">
+                        <button class="cal-btn" onclick="adjustCalibration('left', -0.01)">−</button>
+                        <span id="calLeftValue">0.000</span>
+                        <button class="cal-btn" onclick="adjustCalibration('left', 0.01)">+</button>
+                    </div>
+                </div>
+                <div class="calibration-control">
+                    <label>Right Motor:</label>
+                    <div class="calibration-buttons">
+                        <button class="cal-btn" onclick="adjustCalibration('right', -0.01)">−</button>
+                        <span id="calRightValue">0.000</span>
+                        <button class="cal-btn" onclick="adjustCalibration('right', 0.01)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="./script.js"></script>
 </body>

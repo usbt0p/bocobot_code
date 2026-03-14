@@ -127,6 +127,79 @@ h1 {
     margin-top: 10px;
 }
 
+.calibration-container {
+    border-top: 2px solid #f0f0f0;
+    padding: 20px;
+}
+
+.calibration-container h2 {
+    color: #333;
+    font-size: clamp(1em, 4vw, 1.2em);
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.calibration-row {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.calibration-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.calibration-control label {
+    color: #555;
+    font-weight: 500;
+    font-size: clamp(0.9em, 3vw, 1em);
+}
+
+.calibration-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cal-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.cal-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 3px rgba(102, 126, 234, 0.5);
+}
+
+.cal-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+#calLeftValue,
+#calRightValue {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    color: #667eea;
+    font-size: clamp(0.95em, 3vw, 1.1em);
+    min-width: 60px;
+    text-align: center;
+}
+
 /* Mobile: Extra small screens */
 @media (max-width: 480px) {
     h1 {
@@ -149,6 +222,15 @@ h1 {
 
     .slider-container {
         padding: 15px;
+    }
+
+    .calibration-container {
+        padding: 12px;
+    }
+
+    .calibration-row {
+        flex-direction: column;
+        gap: 15px;
     }
 }
 

@@ -28,21 +28,31 @@ class Robot:
         self.motor_right = motor.DCMotor(pwm_2a, pwm_2b)
         
         self.speed = 0.5
+        self.calibration_left = 0.0
+        self.calibration_right = 0.0
     
     def move(self, left_throttle, right_throttle):
-        """Apply throttle to both motors."""
-        self.motor_left.throttle = left_throttle
-        self.motor_right.throttle = right_throttle
+        """Apply throttle to both motors with calibration."""
+        # Apply calibration offset to compensate for motor discrepancies
+        calibrated_left = left_throttle + self.calibration_left * (1 if left_throttle >= 0 else -1)
+        calibrated_right = right_throttle + self.calibration_right * (1 if right_throttle >= 0 else -1)
+        
+        # Clamp values to valid range
+        calibrated_left = max(-1, min(1, calibrated_left))
+        calibrated_right = max(-1, min(1, calibrated_right))
+        
+        self.motor_left.throttle = calibrated_left
+        self.motor_right.throttle = calibrated_right
     
     def move_forward(self):
         """Move forward."""
         print("Forward")
-        self.move(self.speed, self.speed-0.02)  # tune to compensate
+        self.move(self.speed, self.speed)
     
     def move_backward(self):
         """Move backward."""
         print("Backward")
-        self.move(-self.speed, -self.speed+0.02)
+        self.move(-self.speed, -self.speed)
     
     def move_left(self):
         """Move left."""
@@ -77,6 +87,25 @@ class Robot:
     def get_speed(self):
         """Get the current speed."""
         return self.speed
+    
+    def adjust_calibration_left(self, delta):
+        """Adjust left motor calibration by delta (-0.08 to 0.08)."""
+        self.calibration_left = max(-0.08, min(0.08, self.calibration_left + delta))
+        print(f"Left calibration: {self.calibration_left:.3f}")
+        return self.calibration_left
+    
+    def adjust_calibration_right(self, delta):
+        """Adjust right motor calibration by delta (-0.08 to 0.08)."""
+        self.calibration_right = max(-0.08, min(0.08, self.calibration_right + delta))
+        print(f"Right calibration: {self.calibration_right:.3f}")
+        return self.calibration_right
+    
+    def get_calibration(self):
+        """Get current calibration values."""
+        return {
+            "left": round(self.calibration_left, 3),
+            "right": round(self.calibration_right, 3)
+        }
 
 
 class RobotServer:
@@ -112,18 +141,18 @@ class RobotServer:
         """Process incoming HTTP commands."""
         raw_text = request.body.decode("utf8")
         
-        print(f"{raw_text=}")
-        if "forward" in raw_text:
+        #print(f"{raw_text=}")
+        if "forward" == raw_text:
             self.robot.move_forward()
-        elif "backward" in raw_text:
+        elif "backward" == raw_text:
             self.robot.move_backward()
-        elif "turn_right" in raw_text:
+        elif "turn_right" == raw_text:
             self.robot.turn_right()
-        elif "turn_left" in raw_text:
+        elif "turn_left" == raw_text:
             self.robot.turn_left()
-        elif "right" in raw_text:
+        elif "right" == raw_text:
             self.robot.move_right()
-        elif "left" in raw_text:
+        elif "left" == raw_text:
             self.robot.move_left()
         elif "speed=" in raw_text:
             # Extract speed value from request
@@ -133,6 +162,22 @@ class RobotServer:
                 self.robot.set_speed(speed)
             except Exception as e:
                 print(f"Invalid speed value: {e}")
+        elif "calibrate_left=" in raw_text:
+            # Extract calibration delta for left motor
+            try:
+                delta_str = raw_text.split("calibrate_left=")[1]
+                delta = float(delta_str)
+                self.robot.adjust_calibration_left(delta)
+            except Exception as e:
+                print(f"Invalid calibration value: {e}")
+        elif "calibrate_right=" in raw_text:
+            # Extract calibration delta for right motor
+            try:
+                delta_str = raw_text.split("calibrate_right=")[1]
+                delta = float(delta_str)
+                self.robot.adjust_calibration_right(delta)
+            except Exception as e:
+                print(f"Invalid calibration value: {e}")
         elif "stop" in raw_text:
             self.robot.move_stop()
             
